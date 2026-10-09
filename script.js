@@ -307,7 +307,8 @@ function mostrarCategoriaMenu(category){
   datos.items.forEach(([name, price], index) => {
     const elemento = document.createElement('div');
     elemento.className = 'menu-item';
-    const translated = traducirTextoMenu(name, idiomaActual);
+    const traduccionesCategoria = traduccionesElementosMenu[idiomaActual]?.[category];
+    const translated = traduccionesCategoria?.[index] || traducirTextoMenu(name, idiomaActual);
     elemento.innerHTML = `<span class="menu-item-name">${translated}</span><span class="price">${price}</span>`;
     tarjeta.appendChild(elemento);
   });
@@ -335,8 +336,6 @@ mostrarCategoriaMenu(Object.keys(carta)[0]);
 
 const selectorIdioma = document.querySelector('#languageSelect');
 if(selectorIdioma){ selectorIdioma.value=idiomaActual; selectorIdioma.addEventListener('change', e=>aplicarIdioma(e.target.value)); }
-
-// Menú móvil
 
  // Menú móvil
 const botonMenu = document.querySelector('#menuToggle');
