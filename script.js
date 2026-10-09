@@ -337,16 +337,24 @@ const selectorIdioma = document.querySelector('#languageSelect');
 if(selectorIdioma){ selectorIdioma.value=idiomaActual; selectorIdioma.addEventListener('change', e=>aplicarIdioma(e.target.value)); }
 
 // Menú móvil
+
+ // Menú móvil
 const botonMenu = document.querySelector('#menuToggle');
 const navegacion = document.querySelector('#nav');
-botonMenu.addEventListener('click', () => {
-  const open = navegacion.classList.toggle('open');
-  botonMenu.setAttribute('aria-expanded', open ? 'true' : 'false');
-});
-navegacion.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
-  navegacion.classList.remove('open');
-  botonMenu.setAttribute('aria-expanded','false');
-}));
+
+if (botonMenu && navegacion) {
+  botonMenu.addEventListener('click', () => {
+    const abierto = navegacion.classList.toggle('open');
+    botonMenu.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+  });
+
+  navegacion.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navegacion.classList.remove('open');
+      botonMenu.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
 
 // Animaciones al entrar en pantalla
 const observador = new IntersectionObserver((entradas) => {
