@@ -339,8 +339,78 @@ Object.keys(carta).forEach((category, index) => {
 });
 mostrarCategoriaMenu(Object.keys(carta)[0]);
 
+// Banderas dibujadas en SVG: se ven igual en Windows, Mac y móvil
+// (Windows no muestra las banderas emoji, solo las letras).
+const banderas = {
+  es:'<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#c60b1e"/><rect y="5" width="30" height="10" fill="#ffc400"/></svg>',
+  en:'<svg viewBox="0 0 60 40"><clipPath id="bgb"><path d="M0,0v40h60V0z"/></clipPath><clipPath id="bgb2"><path d="M30,20h30v20zv20H0zH0V0zV0h30z"/></clipPath><g clip-path="url(#bgb)"><path d="M0,0v40h60V0z" fill="#012169"/><path d="M0,0L60,40M60,0L0,40" stroke="#fff" stroke-width="8"/><path d="M0,0L60,40M60,0L0,40" clip-path="url(#bgb2)" stroke="#C8102E" stroke-width="5"/><path d="M30,0v40M0,20h60" stroke="#fff" stroke-width="12"/><path d="M30,0v40M0,20h60" stroke="#C8102E" stroke-width="7"/></g></svg>',
+  de:'<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#ffce00"/><rect width="30" height="13.34" fill="#dd0000"/><rect width="30" height="6.67" fill="#000"/></svg>',
+  nl:'<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#21468b"/><rect width="30" height="13.34" fill="#fff"/><rect width="30" height="6.67" fill="#ae1c28"/></svg>',
+  fr:'<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#ed2939"/><rect width="20" height="20" fill="#fff"/><rect width="10" height="20" fill="#002395"/></svg>',
+  pt:'<svg viewBox="0 0 30 20"><rect width="30" height="20" fill="#da291c"/><rect width="12" height="20" fill="#046a38"/><circle cx="12" cy="10" r="4.2" fill="none" stroke="#ffe900" stroke-width="1.6"/><path d="M10.4,8h3.2v3.2a1.6,1.6 0 0 1-3.2,0z" fill="#fff" stroke="#da291c" stroke-width=".6"/></svg>'
+};
+const nombresIdioma = {es:'Español', en:'English', de:'Deutsch', nl:'Nederlands', fr:'Français', pt:'Português'};
+
+function crearSelectorBanderas(select){
+  const contenedor = select.closest('.language-switcher');
+  contenedor.classList.add('con-banderas');
+  const boton = document.createElement('button');
+  boton.type = 'button';
+  boton.className = 'idioma-boton';
+  boton.setAttribute('aria-haspopup','listbox');
+  boton.setAttribute('aria-expanded','false');
+  const lista = document.createElement('ul');
+  lista.className = 'idioma-lista';
+  lista.setAttribute('role','listbox');
+  lista.tabIndex = -1;
+  Object.keys(nombresIdioma).forEach(codigo => {
+    const opcion = document.createElement('li');
+    opcion.setAttribute('role','option');
+    opcion.dataset.lang = codigo;
+    opcion.tabIndex = -1;
+    opcion.innerHTML = `<span class="bandera">${banderas[codigo]}</span><span>${nombresIdioma[codigo]}</span>`;
+    opcion.addEventListener('click', () => { elegir(codigo); });
+    lista.appendChild(opcion);
+  });
+  contenedor.append(boton, lista);
+
+  function pintar(){
+    const actual = select.value;
+    boton.innerHTML = `<span class="bandera">${banderas[actual]}</span><span class="idioma-nombre">${nombresIdioma[actual]}</span><span class="idioma-codigo">${actual.toUpperCase()}</span><span class="idioma-flecha" aria-hidden="true"></span>`;
+    boton.setAttribute('aria-label', select.getAttribute('aria-label') + ': ' + nombresIdioma[actual]);
+    lista.querySelectorAll('[role=option]').forEach(o => o.setAttribute('aria-selected', o.dataset.lang === actual ? 'true' : 'false'));
+  }
+  function abrir(){
+    contenedor.classList.add('abierto');
+    boton.setAttribute('aria-expanded','true');
+    (lista.querySelector('[aria-selected=true]') || lista.firstChild).focus();
+  }
+  function cerrar(enfocarBoton){
+    contenedor.classList.remove('abierto');
+    boton.setAttribute('aria-expanded','false');
+    if (enfocarBoton) boton.focus();
+  }
+  function elegir(codigo){
+    select.value = codigo;
+    aplicarIdioma(codigo);
+    pintar();
+    cerrar(true);
+  }
+  boton.addEventListener('click', () => contenedor.classList.contains('abierto') ? cerrar(false) : abrir());
+  lista.addEventListener('keydown', e => {
+    const opciones = [...lista.querySelectorAll('[role=option]')];
+    const i = opciones.indexOf(document.activeElement);
+    if (e.key === 'ArrowDown') { e.preventDefault(); opciones[(i + 1) % opciones.length].focus(); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); opciones[(i - 1 + opciones.length) % opciones.length].focus(); }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (i >= 0) elegir(opciones[i].dataset.lang); }
+    else if (e.key === 'Escape' || e.key === 'Tab') { cerrar(e.key === 'Escape'); }
+  });
+  document.addEventListener('click', e => { if (!contenedor.contains(e.target)) cerrar(false); });
+  pintar();
+}
+
 const selectorIdioma = document.querySelector('#languageSelect');
-if(selectorIdioma){ selectorIdioma.value=idiomaActual; selectorIdioma.addEventListener('change', e=>aplicarIdioma(e.target.value)); }
+if(selectorIdioma){ selectorIdioma.value=idiomaActual; selectorIdioma.addEventListener('change', e=>aplicarIdioma(e.target.value)); crearSelectorBanderas(selectorIdioma); }
 
  // Menú móvil
 const botonMenu = document.querySelector('#menuToggle');

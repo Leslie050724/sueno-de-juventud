@@ -214,3 +214,26 @@ select:focus-visible{
 .reviews-more{margin-top:14px;text-align:center}
 .reviews-more a{color:var(--green);font-weight:600;text-decoration:underline;text-underline-offset:3px}
 .reviews-more a:hover{color:var(--purple)}
+
+/* Selector de idioma con banderas (sustituye al desplegable cuando hay JavaScript) */
+.language-switcher.con-banderas select{display:none}
+.idioma-boton{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(90,65,44,.18);background:#fffdf9;color:var(--ink);border-radius:999px;padding:7px 14px 7px 8px;font:700 .82rem "DM Sans",Arial,sans-serif;cursor:pointer;box-shadow:0 5px 18px rgba(46,30,18,.06);transition:transform .2s,box-shadow .2s,border-color .2s}
+.idioma-boton:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(46,30,18,.1);border-color:rgba(33,79,53,.3)}
+.bandera{display:inline-flex;width:24px;height:16px;border-radius:4px;overflow:hidden;flex:none;box-shadow:0 0 0 1px rgba(0,0,0,.08),0 2px 5px rgba(46,30,18,.14)}
+.bandera svg{width:100%;height:100%;display:block}
+.idioma-codigo{display:none}
+.idioma-flecha{width:7px;height:7px;border-right:2px solid #6c5b4e;border-bottom:2px solid #6c5b4e;transform:translateY(-2px) rotate(45deg);margin-left:2px;transition:transform .25s}
+.language-switcher.abierto .idioma-flecha{transform:translateY(2px) rotate(225deg)}
+.idioma-lista{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;list-style:none;margin:0;padding:6px;background:#fffdf9;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);opacity:0;visibility:hidden;transform:translateY(-6px) scale(.98);transform-origin:top right;transition:opacity .18s,transform .18s,visibility .18s}
+.language-switcher.abierto .idioma-lista{opacity:1;visibility:visible;transform:none;transition:opacity .18s,transform .18s}
+.idioma-lista li{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:11px;font:600 .9rem "DM Sans",Arial,sans-serif;color:var(--ink);cursor:pointer;transition:background .15s}
+.idioma-lista li:hover,.idioma-lista li:focus{background:var(--cream);outline:none}
+.idioma-lista li:focus-visible{box-shadow:inset 0 0 0 2px rgba(33,79,53,.35)}
+.idioma-lista li[aria-selected=true]{background:rgba(33,79,53,.09);color:var(--green)}
+.idioma-lista li[aria-selected=true]::after{content:"✓";margin-left:auto;font-weight:700}
+@media(max-width:520px){
+  .idioma-nombre{display:none}
+  .idioma-codigo{display:inline}
+  .idioma-boton{padding:7px 11px 7px 8px;gap:7px;font-size:.76rem}
+}
+@media(prefers-reduced-motion:reduce){.idioma-lista,.idioma-flecha,.idioma-boton{transition:none}}
