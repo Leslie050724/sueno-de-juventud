@@ -22,6 +22,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="preload" as="image" href="img/plato-cubano-detalle.webp" fetchpriority="high">
 
 
 <script type="application/ld+json">
@@ -45,6 +46,17 @@
     "Pizzas",
     "Hamburguesas",
     "Bocadillos"
+  ],
+  "priceRange": "€",
+  "hasMenu": "https://suenodejuventud.es/#carta",
+  "acceptsReservations": false,
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      "opens": "10:00",
+      "closes": "23:00"
+    }
   ],
   "sameAs": [
     "https://www.instagram.com/bar_cafeteria_juventud/"
@@ -83,7 +95,7 @@
 
   <main>
     <section class="hero" id="inicio">
-      <img class="hero-bg" src="img/plato-cubano-detalle.jpeg" alt="Plato cubano de Sueño de Juventud" fetchpriority="high">
+      <img class="hero-bg" src="img/plato-cubano-detalle.webp" alt="Plato cubano de Sueño de Juventud" fetchpriority="high">
       <div class="hero-overlay"></div>
       <div class="container hero-content reveal">
         <span class="eyebrow" data-i18n="hero.eyebrow">BAR · CAFETERÍA · SABOR CUBANO</span>
@@ -112,20 +124,20 @@
 
         <div class="food-grid">
           <article class="food-card reveal">
-            <div class="food-image"><img src="img/plato-cubano.jpeg" alt="Plato cubano" loading="lazy"></div>
+            <div class="food-image"><img src="img/plato-cubano.webp" alt="Plato cubano" loading="lazy"></div>
             <div class="food-body"><span class="food-tag" data-i18n="tags.specialty">Especialidad</span><h3 data-i18n="food.cubanTitle">Plato cubano</h3><p data-i18n="food.cubanText">Arroz con frijoles, acompañamientos y carne.</p><a href="#carta" data-i18n="buttons.seeMenu">Ver en la carta →</a></div>
           </article>
           <article class="food-card reveal delay-1">
-            <div class="food-image"><img src="img/hamburguesa.jpeg" alt="Hamburguesa de la casa" loading="lazy"></div>
+            <div class="food-image"><img src="img/hamburguesa.webp" alt="Hamburguesa de la casa" loading="lazy"></div>
             <div class="food-body"><span class="food-tag" data-i18n="tags.burgers">Hamburguesas</span><h3 data-i18n="food.burgerTitle">Hamburguesa</h3><p data-i18n="food.burgerText">Opciones de pollo, cerdo, ternera y mixta.</p><a href="#carta" data-i18n="buttons.seeMenu">Ver en la carta →</a></div>
           </article>
           <article class="food-card reveal delay-2">
-            <div class="food-image"><img src="img/pizza-jamon.jpeg" alt="Pizza de jamón" loading="lazy"></div>
+            <div class="food-image"><img src="img/pizza-jamon.webp" alt="Pizza de jamón" loading="lazy"></div>
             <div class="food-body"><span class="food-tag" data-i18n="tags.pizzas">Pizzas</span><h3 data-i18n="food.pizzaTitle">Pizza</h3><p data-i18n="food.pizzaText">Margarita, vegetal, jamón, marinera, hawaiana y más.</p><a href="#carta" data-i18n="buttons.seeMenu">Ver en la carta →</a></div>
           </article>
           <article class="food-card reveal delay-3">
-            <div class="food-image"><img src="img/cafe.jpeg" alt="Café con leche" loading="lazy"></div>
-            <div class="food-body"><span class="food-tag" data-i18n="tags.coffee">Cafetería</span><h3 data-i18n="food.coffeeTitle">Un buen café</h3><p data-i18n="food.coffeeText">Desde espresso y cortado hasta bombón, capuccino y más.</p><a href="#carta" data-i18n="buttons.seeMenu">Ver en la carta →</a></div>
+            <div class="food-image"><img src="img/cafe.webp" alt="Café con leche" loading="lazy"></div>
+            <div class="food-body"><span class="food-tag" data-i18n="tags.coffee">Cafetería</span><h3 data-i18n="food.coffeeTitle">Un buen café</h3><p data-i18n="food.coffeeText">Desde espresso y cortado hasta bombón, capuchino y más.</p><a href="#carta" data-i18n="buttons.seeMenu">Ver en la carta →</a></div>
           </article>
         </div>
       </div>
@@ -134,7 +146,7 @@
     <section class="story section">
       <div class="container story-grid">
         <div class="story-photo reveal">
-          <img src="img/hamburguesa.jpeg" alt="Hamburguesa de la casa" loading="lazy">
+          <img src="img/pizza-casa.webp" alt="Pizza de la casa con bebida" loading="lazy">
           <div class="photo-badge"><strong data-i18n="story.badgeTitle">Sabor de siempre</strong><span data-i18n="story.badgeText">Un sitio de barrio para compartir</span></div>
         </div>
         <div class="story-copy reveal delay-1">
@@ -162,7 +174,7 @@
         <div class="menu-tabs" id="menuTabs" role="tablist" aria-label="Categorías del menú" data-i18n-aria="menu.categories"></div>
         <div class="menu-layout">
           <div class="menu-visual reveal" id="menuVisual">
-            <div class="menu-visual-media" id="menuVisualMedia"><img id="menuVisualImg" src="img/plato-cubano.jpeg" alt="Comida de Sueño de Juventud"></div>
+            <div class="menu-visual-media" id="menuVisualMedia"><img id="menuVisualImg" src="img/plato-cubano.webp" alt="Comida de Sueño de Juventud"></div>
             <div class="menu-visual-caption"><span id="menuVisualTag">Especialidad</span><strong id="menuVisualTitle">Plato cubano</strong></div>
           </div>
           <div class="menu-list reveal delay-1" id="menuGrid"></div>
@@ -182,7 +194,8 @@
           <article class="review-card reveal delay-1"><div class="stars">★★★★★</div><p data-i18n="reviews.quote2">“Un local muy tranquilo fantástico para compartir en familia, un servicio excelente y la comida riquísima.”</p><strong>Amor Propio</strong><span data-i18n="reviews.ago1">Google · hace 1 año</span></article>
           <article class="review-card reveal delay-2"><div class="stars">★★★★★</div><p data-i18n="reviews.quote3">“El ambiente es acogedor, el servicio es amable y atento, haciendo que cada visita sea especial.”</p><strong>CESAR AUGUSTO</strong><span data-i18n="reviews.ago1">Google · hace 1 año</span></article>
         </div>
-        <div class="rating-line"><span class="rating-number">4,6</span><span class="stars">★★★★★</span><span data-i18n="reviews.ratingNote">valoración mostrada en la ficha pública · 26 votos consultados</span></div>
+        <div class="rating-line"><span class="rating-number">4,6</span><span class="stars">★★★★★</span><span data-i18n="reviews.ratingNote">de media en Google · 26 opiniones</span></div>
+        <p class="reviews-more"><a href="https://www.google.com/maps/search/?api=1&amp;query=Sue%C3%B1o+de+Juventud+Av.+de+Canarias+450+Vecindario" target="_blank" rel="noopener" data-i18n="reviews.seeAll">Ver todas las reseñas en Google →</a></p>
       </div>
     </section>
 
@@ -193,14 +206,14 @@
           <h2 data-i18n="gallery.title">Sabores que hablan por sí solos</h2>
         </div>
         <div class="gallery-grid">
-          <button class="gallery-item gallery-big reveal" data-full="img/plato-cubano-detalle.jpeg" aria-label="Ver plato cubano"><img src="img/plato-cubano-detalle.jpeg" alt="Plato cubano" loading="lazy"></button>
-          <button class="gallery-item reveal delay-1" data-full="img/chicharrones.jpeg" aria-label="Ver chicharrones"><img src="img/chicharrones.jpeg" alt="Chicharrones" loading="lazy"></button>
-          <button class="gallery-item reveal delay-2" data-full="img/pizza-casa.jpeg" aria-label="Ver pizza"><img src="img/pizza-casa.jpeg" alt="Pizza con bebida" loading="lazy"></button>
-          <button class="gallery-item reveal delay-1" data-full="img/hamburguesa.jpeg" aria-label="Ver hamburguesa"><img src="img/hamburguesa.jpeg" alt="Hamburguesa de la casa" loading="lazy"></button>
-          <button class="gallery-item reveal delay-2" data-full="img/pollo-y-empanada.jpeg" aria-label="Ver plato combinado"><img src="img/pollo-y-empanada.jpeg" alt="Plato combinado" loading="lazy"></button>
-          <button class="gallery-item reveal delay-1" data-full="img/cafe.jpeg" aria-label="Ver café"><img src="img/cafe.jpeg" alt="Café" loading="lazy"></button>
-          <button class="gallery-item reveal delay-2" data-full="img/flan.jpeg" aria-label="Ver flan"><img src="img/flan.jpeg" alt="Flan" loading="lazy"></button>
-          <button class="gallery-item reveal delay-3" data-full="img/mojito.jpeg" aria-label="Ver mojito"><img src="img/mojito.jpeg" alt="Mojito" loading="lazy"></button>
+          <button class="gallery-item gallery-big reveal" data-full="img/plato-cubano-detalle.webp" aria-label="Ver plato cubano"><img src="img/plato-cubano-detalle.webp" alt="Plato cubano" loading="lazy"></button>
+          <button class="gallery-item reveal delay-1" data-full="img/chicharrones.webp" aria-label="Ver chicharrones"><img src="img/chicharrones.webp" alt="Chicharrones" loading="lazy"></button>
+          <button class="gallery-item reveal delay-2" data-full="img/pizza-casa.webp" aria-label="Ver pizza"><img src="img/pizza-casa.webp" alt="Pizza con bebida" loading="lazy"></button>
+          <button class="gallery-item reveal delay-1" data-full="img/hamburguesa.webp" aria-label="Ver hamburguesa"><img src="img/hamburguesa.webp" alt="Hamburguesa de la casa" loading="lazy"></button>
+          <button class="gallery-item reveal delay-2" data-full="img/pollo-y-empanada.webp" aria-label="Ver plato combinado"><img src="img/pollo-y-empanada.webp" alt="Plato combinado" loading="lazy"></button>
+          <button class="gallery-item reveal delay-1" data-full="img/cafe.webp" aria-label="Ver café"><img src="img/cafe.webp" alt="Café" loading="lazy"></button>
+          <button class="gallery-item reveal delay-2" data-full="img/flan.webp" aria-label="Ver flan"><img src="img/flan.webp" alt="Flan" loading="lazy"></button>
+          <button class="gallery-item reveal delay-3" data-full="img/mojito.webp" aria-label="Ver mojito"><img src="img/mojito.webp" alt="Mojito" loading="lazy"></button>
         </div>
       </div>
     </section>
@@ -219,8 +232,8 @@
         </div>
         <div class="contact-card reveal delay-1">
           <div><span>📍</span><div><strong data-i18n="contact.address">Dirección</strong><p>Av. de Canarias, 450<br>35110 Vecindario, Las Palmas</p></div></div>
-          <div><span>📞</span><div><strong data-i18n="contact.phone">Teléfono</strong><p><a href="tel:+34698238816">+34 698 23 88 16</a></p></div></div>
-          <div><span>🕐</span><div><strong data-i18n="contact.hours">Horario online</strong><p data-i18n="contact.schedule">Martes a domingo · 10:00–23:00<br>Lunes · cerrado</p></div></div>
+          <div><span>📞</span><div><strong data-i18n="contact.phone">Teléfono</strong><p><a href="tel:+34698238816">+34 698 238 816</a></p></div></div>
+          <div><span>🕐</span><div><strong data-i18n="contact.hours">Horario</strong><p data-i18n="contact.schedule">Martes a domingo · 10:00–23:00<br>Lunes · cerrado</p></div></div>
         </div>
       </div>
     </section>
@@ -237,6 +250,9 @@
   >
     Instagram
   </a>
+  <!-- Pendiente: mostrar cuando el aviso legal tenga los datos del titular
+  <a href="aviso-legal.html" data-i18n="legal">Aviso legal y privacidad</a>
+  -->
 </div></footer>
   
 
