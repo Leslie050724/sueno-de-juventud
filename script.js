@@ -293,6 +293,9 @@ function mostrarCategoriaMenu(category){
     const imagen = document.createElement('img');
     imagen.id = 'menuVisualImg';
     imagen.src = datos.image;
+    // Versión pequeña para móvil si existe (img/foto-480.webp, img/foto-900.webp)
+    const versiones = {'img/chicharrones.webp':'img/chicharrones-480.webp 480w, img/chicharrones.webp 900w','img/plato-cubano.webp':'img/plato-cubano-480.webp 480w, img/plato-cubano.webp 900w','img/hamburguesa.webp':'img/hamburguesa-480.webp 480w, img/hamburguesa.webp 900w','img/pollo-y-empanada.webp':'img/pollo-y-empanada-480.webp 480w, img/pollo-y-empanada.webp 900w','img/pizza-jamon.webp':'img/pizza-jamon-480.webp 480w, img/pizza-jamon.webp 900w','img/flan.webp':'img/flan-480.webp 480w, img/flan.webp 900w','img/cafe.webp':'img/cafe-480.webp 480w, img/cafe.webp 900w','img/mojito.webp':'img/mojito-480.webp 480w, img/mojito-900.webp 900w, img/mojito.webp 1600w'};
+    if (versiones[datos.image]) { imagen.srcset = versiones[datos.image]; imagen.sizes = '(max-width: 1000px) 90vw, 360px'; }
     imagen.alt = datos.title;
     imagen.loading = 'lazy';
     if (datos.fallback) {
@@ -308,6 +311,8 @@ function mostrarCategoriaMenu(category){
 
   const tarjeta = document.createElement('article');
   tarjeta.className = 'menu-card';
+  const preciosCortos = datos.items.every(([, precio]) => precio.length <= 12);
+  if (datos.items.length > 8 && preciosCortos) tarjeta.classList.add('dos-columnas');
   tarjeta.innerHTML = `<h3>${metadatos[1]}</h3><p class="menu-note">${traducir('menu.note')}</p>`;
   datos.items.forEach(([name, price], index) => {
     const elemento = document.createElement('div');
@@ -324,6 +329,15 @@ function mostrarCategoriaMenu(category){
     const active = btn.dataset.category === category;
     btn.classList.toggle('active', active);
     btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    btn.tabIndex = active ? 0 : -1;
+    if (active) {
+      listaMenu.setAttribute('aria-labelledby', btn.id);
+      // En móvil las categorías se deslizan: centramos la elegida
+      const fila = btn.parentElement;
+      if (fila.scrollWidth > fila.clientWidth) {
+        fila.scrollTo({left: btn.offsetLeft - (fila.clientWidth - btn.offsetWidth) / 2, behavior: 'smooth'});
+      }
+    }
   });
 }
 
@@ -331,6 +345,9 @@ Object.keys(carta).forEach((category, index) => {
   const boton = document.createElement('button');
   boton.className = 'menu-tab' + (index === 0 ? ' active' : '');
   boton.dataset.category = category;
+  boton.id = 'pestana-' + index;
+  boton.setAttribute('aria-controls', 'menuGrid');
+  boton.tabIndex = index === 0 ? 0 : -1;
   boton.textContent = etiquetasCategoriasMenu[idiomaActual][category] || category;
   boton.setAttribute('role','tab');
   boton.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
@@ -338,6 +355,20 @@ Object.keys(carta).forEach((category, index) => {
   pestañas.appendChild(boton);
 });
 mostrarCategoriaMenu(Object.keys(carta)[0]);
+pestañas.addEventListener('keydown', e => {
+  const botones = [...pestañas.querySelectorAll('.menu-tab')];
+  const i = botones.indexOf(document.activeElement);
+  if (i < 0) return;
+  let siguiente = null;
+  if (e.key === 'ArrowRight') siguiente = (i + 1) % botones.length;
+  else if (e.key === 'ArrowLeft') siguiente = (i - 1 + botones.length) % botones.length;
+  else if (e.key === 'Home') siguiente = 0;
+  else if (e.key === 'End') siguiente = botones.length - 1;
+  if (siguiente === null) return;
+  e.preventDefault();
+  botones[siguiente].focus();
+  mostrarCategoriaMenu(botones[siguiente].dataset.category);
+});
 
 // Banderas dibujadas en SVG: se ven igual en Windows, Mac y móvil
 // (Windows no muestra las banderas emoji, solo las letras).

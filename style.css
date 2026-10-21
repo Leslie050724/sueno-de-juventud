@@ -237,3 +237,38 @@ select:focus-visible{
   .idioma-boton{padding:7px 11px 7px 8px;gap:7px;font-size:.76rem}
 }
 @media(prefers-reduced-motion:reduce){.idioma-lista,.idioma-flecha,.idioma-boton{transition:none}}
+
+/* ===== Carta: mejor aprovechamiento del espacio ===== */
+/* Gris un poco más oscuro para que el texto secundario se lea bien (contraste AA) */
+:root{--muted:#6b6159}
+/* PC: una sola tarjeta que ocupa todo el ancho, con los platos en dos columnas */
+.menu-list{grid-template-columns:1fr}
+.menu-card{display:grid;grid-template-columns:1fr;column-gap:40px;align-content:start}
+/* Categorías largas (bebidas, cafés...) en dos columnas para no hacer una lista interminable */
+.menu-card.dos-columnas{grid-template-columns:1fr 1fr}
+.menu-card>h3,.menu-card>.menu-note{grid-column:1/-1}
+/* Si el nombre y el precio no caben juntos, el precio baja a la línea de abajo */
+.menu-item{flex-wrap:wrap;column-gap:16px;row-gap:2px}
+.menu-item-name{flex:1 1 55%}
+.price{margin-left:auto}
+.menu-list:focus-visible{outline:3px solid var(--gold);outline-offset:4px;border-radius:20px}
+@media(max-width:1000px){
+  .menu-list{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  .menu-card,.menu-card.dos-columnas{grid-template-columns:1fr}
+  /* Móvil: categorías en una fila que se desliza con el dedo */
+  .menu-tabs{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;margin:0 -5.5vw 18px;padding:4px 5.5vw 10px;scroll-snap-type:x proximity;scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 5vw,#000 calc(100% - 9vw),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 5vw,#000 calc(100% - 9vw),transparent)}
+  .menu-tabs::-webkit-scrollbar{display:none}
+  .menu-tab{flex:none;width:auto;min-height:42px;padding:9px 16px;white-space:nowrap;scroll-snap-align:center}
+  /* Foto más baja para que los precios aparezcan antes */
+  .menu-visual,.menu-visual img{min-height:0;height:170px}
+  .menu-visual-media{height:170px}
+  .menu-visual-caption{bottom:16px}
+  .menu-visual-caption strong{font-size:1.6rem}
+  .menu-visual-media .drink-pair,.drink-photo img{min-height:0;height:170px}
+  .menu-layout{gap:14px}
+}
+/* Botón del menú móvil con un área de toque cómoda (44 px) */
+.menu-toggle{min-width:44px;min-height:44px}
