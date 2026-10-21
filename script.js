@@ -144,14 +144,23 @@ function traducirTextoMenu(text, lang){
   return out;
 }
 
-let idiomaActual = localStorage.getItem('suenoLanguage') || 'es';
+// Primera visita: usamos el idioma del navegador si la web lo tiene (útil para turistas).
+// Si el visitante ya eligió un idioma, se respeta su elección.
+function idiomaInicial(){
+  let guardado = null;
+  try { guardado = localStorage.getItem('suenoLanguage'); } catch(e) {}
+  if (guardado) return guardado;
+  const delNavegador = (navigator.language || 'es').slice(0,2).toLowerCase();
+  return ['es','en','de','nl','fr','pt'].includes(delNavegador) ? delNavegador : 'es';
+}
+let idiomaActual = idiomaInicial();
 function obtenerRuta(obj, path){ return path.split('.').reduce((o,k)=>o?.[k],obj); }
 function traducir(key){ return obtenerRuta(traducciones[idiomaActual], key) || obtenerRuta(traducciones.es,key) || key; }
 
 function aplicarIdioma(lang){
   if(!traducciones[lang]) lang='es';
   idiomaActual=lang;
-  localStorage.setItem('suenoLanguage', lang);
+  try { localStorage.setItem('suenoLanguage', lang); } catch(e) {}
   document.documentElement.lang=lang;
   document.title=traducir('title');
   document.documentElement.style.setProperty('--gallery-view', JSON.stringify(traducir('labels.gallery')));
