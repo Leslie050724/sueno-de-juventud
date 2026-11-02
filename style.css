@@ -282,11 +282,12 @@ select:focus-visible{
 .asistente-cabecera{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 10px 16px;background:var(--green);color:#fff}
 .asistente-cerrar{border:0;background:transparent;color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;padding:0 6px}
 .asistente-chat{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:14px}
-.asistente-mensaje{max-width:88%;padding:8px 12px;border-radius:12px;font-size:.95rem;overflow-wrap:anywhere}
+.asistente-mensaje{white-space:pre-line;max-width:88%;padding:8px 12px;border-radius:12px;font-size:.95rem;overflow-wrap:anywhere}
 .asistente-mensaje.bot{align-self:flex-start;background:#fff;border:1px solid var(--line)}
 .asistente-mensaje.yo{align-self:flex-end;background:var(--green);color:#fff}
+.asistente-sugerencias{display:flex;gap:6px;overflow-x:auto;padding:0 14px 8px}
+.asistente-sugerencias button{flex:none;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:5px 10px;font-size:.8rem;cursor:pointer}
 .asistente-aviso{padding:0 14px 8px;font-size:.75rem;color:var(--muted)}
 .asistente-formulario{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)}
 .asistente-formulario input{flex:1;min-width:0;font:inherit;font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
 .asistente-formulario button{border:0;border-radius:10px;background:var(--gold);color:#21170d;font-weight:800;padding:9px 12px;cursor:pointer}
-.asistente-formulario button:disabled{opacity:.55;cursor:default}
