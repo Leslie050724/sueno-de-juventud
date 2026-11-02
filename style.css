@@ -291,3 +291,6 @@ select:focus-visible{
 .asistente-formulario{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)}
 .asistente-formulario input{flex:1;min-width:0;font:inherit;font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
 .asistente-formulario button{border:0;border-radius:10px;background:var(--gold);color:#21170d;font-weight:800;padding:9px 12px;cursor:pointer}
+
+/* La dirección de la barra superior se ve también en el móvil */
+.topbar-inner span[data-bar="direccion"]{display:inline}
