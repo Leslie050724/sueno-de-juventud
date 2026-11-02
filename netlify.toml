@@ -1,0 +1,6 @@
+[build]
+  publish = "."
+  command = "node scripts/generar-carta.js"
+
+[functions]
+  directory = "netlify/functions"

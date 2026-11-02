@@ -272,3 +272,21 @@ select:focus-visible{
 }
 /* Botón del menú móvil con un área de toque cómoda (44 px) */
 .menu-toggle{min-width:44px;min-height:44px}
+
+/* Asistente de la carta */
+.asistente-boton{position:fixed;right:20px;bottom:90px;z-index:60;width:58px;height:58px;border:0;border-radius:50%;background:var(--green);color:#fff;font-size:1.45rem;cursor:pointer;box-shadow:0 12px 30px rgba(0,0,0,.25);transition:transform .25s}
+.asistente-boton:hover{transform:scale(1.08)}
+.asistente-boton:focus-visible,.asistente-panel button:focus-visible,.asistente-panel input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.asistente-panel{position:fixed;right:20px;bottom:158px;z-index:61;width:min(370px,calc(100vw - 32px));height:min(480px,calc(100dvh - 190px));display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.28)}
+.asistente-panel[hidden]{display:none}
+.asistente-cabecera{display:flex;align-items:center;justify-content:space-between;padding:10px 12px 10px 16px;background:var(--green);color:#fff}
+.asistente-cerrar{border:0;background:transparent;color:#fff;font-size:1.6rem;line-height:1;cursor:pointer;padding:0 6px}
+.asistente-chat{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:14px}
+.asistente-mensaje{max-width:88%;padding:8px 12px;border-radius:12px;font-size:.95rem;overflow-wrap:anywhere}
+.asistente-mensaje.bot{align-self:flex-start;background:#fff;border:1px solid var(--line)}
+.asistente-mensaje.yo{align-self:flex-end;background:var(--green);color:#fff}
+.asistente-aviso{padding:0 14px 8px;font-size:.75rem;color:var(--muted)}
+.asistente-formulario{display:flex;gap:6px;padding:10px;border-top:1px solid var(--line)}
+.asistente-formulario input{flex:1;min-width:0;font:inherit;font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+.asistente-formulario button{border:0;border-radius:10px;background:var(--gold);color:#21170d;font-weight:800;padding:9px 12px;cursor:pointer}
+.asistente-formulario button:disabled{opacity:.55;cursor:default}
