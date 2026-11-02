@@ -154,6 +154,70 @@ function idiomaInicial(){
   return ['es','en','de','nl','fr','pt'].includes(delNavegador) ? delNavegador : 'es';
 }
 let idiomaActual = idiomaInicial();
+// Prepara el horario, el teléfono y la dirección de la web a partir de datos-bar.js.
+const DIAS_BAR = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
+
+function diaEnIdioma(indice, lang){
+  // El 3 de enero de 2022 fue lunes.
+  return new Intl.DateTimeFormat(lang, { weekday:'long', timeZone:'UTC' }).format(new Date(Date.UTC(2022, 0, 3 + indice)));
+}
+
+function textoHorario(lang){
+  const palabras = { es:['a','cerrado'], en:['to','closed'], de:['bis','geschlossen'], nl:['t/m','gesloten'], fr:['au','fermé'], pt:['a','fechado'] }[lang];
+  const claveDia = dia => dia ? dia.abre + '–' + dia.cierra : 'cerrado';
+  const grupos = [];
+  DIAS_BAR.forEach((nombre, indice) => {
+    const clave = claveDia(datosBar.horario[nombre]);
+    const ultimo = grupos[grupos.length - 1];
+    if (ultimo && ultimo.clave === clave) ultimo.fin = indice;
+    else grupos.push({ clave, inicio: indice, fin: indice });
+  });
+  grupos.sort((a, b) => (a.clave === 'cerrado') - (b.clave === 'cerrado'));
+  return grupos.map(g => {
+    const dias = g.inicio === g.fin ? diaEnIdioma(g.inicio, lang) : diaEnIdioma(g.inicio, lang) + ' ' + palabras[0] + ' ' + diaEnIdioma(g.fin, lang);
+    const texto = dias.charAt(0).toUpperCase() + dias.slice(1);
+    return texto + ' · ' + (g.clave === 'cerrado' ? palabras[1] : g.clave);
+  }).join('<br>');
+}
+
+function aplicarDatosBar(){
+  const soloNumeros = t => t.replace(/\D/g, '');
+  Object.keys(traducciones).forEach(lang => {
+    traducciones[lang].contact.schedule = textoHorario(lang);
+    traducciones[lang].labels.call = traducciones[lang].labels.call.replace(/\d{3} \d{2} \d{2} \d{2}/, datosBar.telefono);
+  });
+  document.querySelectorAll('a[href^="tel:"]').forEach(a => {
+    a.href = 'tel:+34' + soloNumeros(datosBar.telefono);
+    a.innerHTML = a.innerHTML.replace(/\+34 \d{3} \d{2} \d{2} \d{2}/, '+34 ' + datosBar.telefono);
+  });
+  document.querySelectorAll('a[href*="wa.me/"]').forEach(a => { a.href = 'https://wa.me/34' + soloNumeros(datosBar.whatsapp); });
+  document.querySelectorAll('[data-bar="direccion"]').forEach(el => { el.textContent = datosBar.direccion + ' · ' + datosBar.ciudad; });
+  document.querySelectorAll('[data-bar="direccion-completa"]').forEach(el => {
+    el.innerHTML = '';
+    el.append(datosBar.direccion, document.createElement('br'), datosBar.codigoPostal + ' ' + datosBar.ciudad + ', ' + datosBar.provincia);
+  });
+  const servicios = { terrace: datosBar.servicios.terraza, wifi: datosBar.servicios.wifi, takeaway: datosBar.servicios.llevar };
+  Object.entries(servicios).forEach(([clave, tiene]) => {
+    if (tiene) return;
+    document.querySelectorAll('[data-i18n="features.' + clave + '"]').forEach(elemento => { elemento.parentElement.style.display = 'none'; });
+  });
+  const datosGoogle = document.querySelector('script[type="application/ld+json"]');
+  if (datosGoogle) {
+    try {
+      const ficha = JSON.parse(datosGoogle.textContent);
+      ficha.telephone = '+34' + soloNumeros(datosBar.telefono);
+      if (ficha.address) { ficha.address.streetAddress = datosBar.direccion; ficha.address.postalCode = datosBar.codigoPostal; ficha.address.addressLocality = datosBar.ciudad; }
+      const ingles = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+      ficha.openingHoursSpecification = DIAS_BAR.flatMap((nombre, i) => {
+        const dia = datosBar.horario[nombre];
+        return dia ? [{ '@type':'OpeningHoursSpecification', dayOfWeek:ingles[i], opens:dia.abre, closes:dia.cierra }] : [];
+      });
+      datosGoogle.textContent = JSON.stringify(ficha);
+    } catch (e) {}
+  }
+}
+aplicarDatosBar();
+
 function obtenerRuta(obj, path){ return path.split('.').reduce((o,k)=>o?.[k],obj); }
 function traducir(key){ return obtenerRuta(traducciones[idiomaActual], key) || obtenerRuta(traducciones.es,key) || key; }
 

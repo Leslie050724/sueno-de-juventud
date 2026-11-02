@@ -1,35 +1,36 @@
 /*
   Asistente de la carta. Funciona entero en el navegador: no usa IA, claves ni servidor.
-  Lee los platos y precios de "carta" (script.js), así que cambiar un precio allí lo cambia aquí.
+  Lee los platos y precios de "carta" (script.js) y el horario y los contactos de datos-bar.js.
 */
-const TELEFONO_BAR = '828 98 07 47';
-const WHATSAPP_BAR = '698 238 816';
+const TELEFONO_BAR = datosBar.telefono;
+const WHATSAPP_BAR = datosBar.whatsapp;
+const DIRECCION_BAR = `${datosBar.direccion}, ${datosBar.codigoPostal} ${datosBar.ciudad}`;
 
 const textosAsistente = {
   es: { boton:'Preguntar al asistente', titulo:'Asistente del bar', hola:'Hola. Pregúntame por un plato, los precios o el horario.', campo:'Escribe tu pregunta', enviar:'Enviar', cerrar:'Cerrar', aviso:'Respuestas automáticas. Para alergias, pregunta siempre al personal.',
     sugerencias:['¿Cuánto cuesta el plato cubano?','¿Qué pizzas tenéis?','¿Abrís hoy?','¿Dónde estáis?'],
     alergia:`No puedo confirmar alérgenos ni ingredientes. Pregunta al personal o llama al ${TELEFONO_BAR} antes de pedir.`, nose:`No tengo ese dato. Pregunta al personal, llama al ${TELEFONO_BAR} o escribe por WhatsApp al ${WHATSAPP_BAR}.`,
-    horario:'Abrimos de martes a domingo, de 10:00 a 23:00. Los lunes cerramos.', abierto:'Sí, ahora estamos abiertos hasta las 23:00.', cerrado:'Ahora estamos cerrados.', hoyCerrado:'Hoy lunes cerramos.', direccion:'Estamos en Av. de Canarias, 450, 35110 Vecindario.', telefono:`Puedes llamar al ${TELEFONO_BAR} o escribir por WhatsApp al ${WHATSAPP_BAR}.`, servicios:'Sí, tenemos terraza, wifi gratis y comida para llevar.', recomienda:'Nuestra especialidad es el plato cubano: arroz con frijoles, acompañamientos y carne.', hola2:'Hola. ¿En qué te ayudo?', gracias:'De nada. ¡Que aproveche!', mas:'y {n} más en la carta', racion:'Ración', desde:'Desde' },
+    abierto:'Sí, ahora estamos abiertos hasta las {h}.', cerrado:'Ahora estamos cerrados.', hoyCerrado:'Hoy cerramos.', direccion:`Estamos en ${DIRECCION_BAR}.`, telefono:`Puedes llamar al ${TELEFONO_BAR} o escribir por WhatsApp al ${WHATSAPP_BAR}.`, servicios:'Tenemos: ', nombresServicios:['terraza', 'wifi gratis', 'comida para llevar'], recomienda:'Nuestra especialidad es el plato cubano: arroz con frijoles, acompañamientos y carne.', hola2:'Hola. ¿En qué te ayudo?', gracias:'De nada. ¡Que aproveche!', mas:'y {n} más en la carta', racion:'Ración', desde:'Desde' },
   en: { boton:'Ask the assistant', titulo:'Bar assistant', hola:'Hello. Ask me about a dish, prices or opening hours.', campo:'Type your question', enviar:'Send', cerrar:'Close', aviso:'Automatic answers. For allergies, always ask the staff.',
     sugerencias:['How much is the Cuban platter?','What pizzas do you have?','Are you open today?','Where are you?'],
     alergia:`I can't confirm allergens or ingredients. Please ask the staff or call ${TELEFONO_BAR} before ordering.`, nose:`I don't have that information. Ask the staff, call ${TELEFONO_BAR} or message us on WhatsApp at ${WHATSAPP_BAR}.`,
-    horario:'We open Tuesday to Sunday, 10:00 to 23:00. We are closed on Mondays.', abierto:'Yes, we are open now until 23:00.', cerrado:'We are closed right now.', hoyCerrado:'We are closed today, Monday.', direccion:'We are at Av. de Canarias, 450, 35110 Vecindario.', telefono:`Call ${TELEFONO_BAR} or message us on WhatsApp at ${WHATSAPP_BAR}.`, servicios:'Yes, we have a terrace, free wifi and takeaway.', recomienda:'Our speciality is the Cuban platter: rice with beans, sides and meat.', hola2:'Hello. How can I help?', gracias:"You're welcome. Enjoy!", mas:'and {n} more on the menu', racion:'Full', desde:'From' },
+    abierto:'Yes, we are open now until {h}.', cerrado:'We are closed right now.', hoyCerrado:'We are closed today.', direccion:`We are at ${DIRECCION_BAR}.`, telefono:`Call ${TELEFONO_BAR} or message us on WhatsApp at ${WHATSAPP_BAR}.`, servicios:'We have: ', nombresServicios:['terrace', 'free wifi', 'takeaway'], recomienda:'Our speciality is the Cuban platter: rice with beans, sides and meat.', hola2:'Hello. How can I help?', gracias:"You're welcome. Enjoy!", mas:'and {n} more on the menu', racion:'Full', desde:'From' },
   de: { boton:'Assistent fragen', titulo:'Bar-Assistent', hola:'Hallo. Fragen Sie mich nach Gerichten, Preisen oder Öffnungszeiten.', campo:'Ihre Frage', enviar:'Senden', cerrar:'Schließen', aviso:'Automatische Antworten. Bei Allergien fragen Sie immer das Personal.',
     sugerencias:['Was kostet der kubanische Teller?','Welche Pizzas gibt es?','Haben Sie heute geöffnet?','Wo sind Sie?'],
     alergia:`Allergene und Zutaten kann ich nicht bestätigen. Bitte fragen Sie vor der Bestellung das Personal oder rufen Sie ${TELEFONO_BAR} an.`, nose:`Diese Information habe ich nicht. Fragen Sie das Personal, rufen Sie ${TELEFONO_BAR} an oder schreiben Sie per WhatsApp an ${WHATSAPP_BAR}.`,
-    horario:'Geöffnet Dienstag bis Sonntag, 10:00 bis 23:00. Montags geschlossen.', abierto:'Ja, wir haben jetzt bis 23:00 geöffnet.', cerrado:'Wir haben gerade geschlossen.', hoyCerrado:'Heute, am Montag, ist geschlossen.', direccion:'Sie finden uns in der Av. de Canarias, 450, 35110 Vecindario.', telefono:`Rufen Sie ${TELEFONO_BAR} an oder schreiben Sie per WhatsApp an ${WHATSAPP_BAR}.`, servicios:'Ja, wir haben eine Terrasse, kostenloses WLAN und Essen zum Mitnehmen.', recomienda:'Unsere Spezialität ist der kubanische Teller: Reis mit Bohnen, Beilagen und Fleisch.', hola2:'Hallo. Wie kann ich helfen?', gracias:'Gern geschehen. Guten Appetit!', mas:'und {n} weitere auf der Karte', racion:'Portion', desde:'Ab' },
+    abierto:'Ja, wir haben jetzt bis {h} geöffnet.', cerrado:'Wir haben gerade geschlossen.', hoyCerrado:'Heute ist geschlossen.', direccion:`Sie finden uns in der ${DIRECCION_BAR}.`, telefono:`Rufen Sie ${TELEFONO_BAR} an oder schreiben Sie per WhatsApp an ${WHATSAPP_BAR}.`, servicios:'Wir haben: ', nombresServicios:['Terrasse', 'kostenloses WLAN', 'Essen zum Mitnehmen'], recomienda:'Unsere Spezialität ist der kubanische Teller: Reis mit Bohnen, Beilagen und Fleisch.', hola2:'Hallo. Wie kann ich helfen?', gracias:'Gern geschehen. Guten Appetit!', mas:'und {n} weitere auf der Karte', racion:'Portion', desde:'Ab' },
   nl: { boton:'Vraag het de assistent', titulo:'Bar-assistent', hola:'Hallo. Vraag me naar een gerecht, de prijzen of de openingstijden.', campo:'Typ uw vraag', enviar:'Versturen', cerrar:'Sluiten', aviso:'Automatische antwoorden. Vraag bij allergieën altijd het personeel.',
     sugerencias:['Wat kost de Cubaanse schotel?',"Welke pizza's hebben jullie?",'Zijn jullie vandaag open?','Waar zijn jullie?'],
     alergia:`Ik kan allergenen en ingrediënten niet bevestigen. Vraag het personeel of bel ${TELEFONO_BAR} voordat u bestelt.`, nose:`Die informatie heb ik niet. Vraag het personeel, bel ${TELEFONO_BAR} of stuur een WhatsApp naar ${WHATSAPP_BAR}.`,
-    horario:'Open van dinsdag tot zondag, 10:00 tot 23:00. Maandag gesloten.', abierto:'Ja, we zijn nu open tot 23:00.', cerrado:'We zijn nu gesloten.', hoyCerrado:'Vandaag, maandag, zijn we gesloten.', direccion:'U vindt ons op Av. de Canarias, 450, 35110 Vecindario.', telefono:`Bel ${TELEFONO_BAR} of stuur een WhatsApp naar ${WHATSAPP_BAR}.`, servicios:'Ja, we hebben een terras, gratis wifi en afhaalmaaltijden.', recomienda:'Onze specialiteit is de Cubaanse schotel: rijst met bonen, bijgerechten en vlees.', hola2:'Hallo. Waarmee kan ik helpen?', gracias:'Graag gedaan. Eet smakelijk!', mas:'en nog {n} op de kaart', racion:'Portie', desde:'Vanaf' },
+    abierto:'Ja, we zijn nu open tot {h}.', cerrado:'We zijn nu gesloten.', hoyCerrado:'Vandaag zijn we gesloten.', direccion:`U vindt ons op ${DIRECCION_BAR}.`, telefono:`Bel ${TELEFONO_BAR} of stuur een WhatsApp naar ${WHATSAPP_BAR}.`, servicios:'We hebben: ', nombresServicios:['terras', 'gratis wifi', 'afhaalmaaltijden'], recomienda:'Onze specialiteit is de Cubaanse schotel: rijst met bonen, bijgerechten en vlees.', hola2:'Hallo. Waarmee kan ik helpen?', gracias:'Graag gedaan. Eet smakelijk!', mas:'en nog {n} op de kaart', racion:'Portie', desde:'Vanaf' },
   fr: { boton:"Demander à l'assistant", titulo:'Assistant du bar', hola:'Bonjour. Posez-moi vos questions sur un plat, les prix ou les horaires.', campo:'Votre question', enviar:'Envoyer', cerrar:'Fermer', aviso:"Réponses automatiques. En cas d'allergie, demandez toujours au personnel.",
     sugerencias:["Combien coûte l'assiette cubaine ?",'Quelles pizzas avez-vous ?',"Êtes-vous ouverts aujourd'hui ?",'Où êtes-vous ?'],
     alergia:`Je ne peux pas confirmer les allergènes ni les ingrédients. Demandez au personnel ou appelez le ${TELEFONO_BAR} avant de commander.`, nose:`Je n'ai pas cette information. Demandez au personnel, appelez le ${TELEFONO_BAR} ou écrivez sur WhatsApp au ${WHATSAPP_BAR}.`,
-    horario:'Ouvert du mardi au dimanche, de 10:00 à 23:00. Fermé le lundi.', abierto:"Oui, nous sommes ouverts jusqu'à 23:00.", cerrado:'Nous sommes fermés pour le moment.', hoyCerrado:"Nous sommes fermés aujourd'hui, lundi.", direccion:'Nous sommes Av. de Canarias, 450, 35110 Vecindario.', telefono:`Appelez le ${TELEFONO_BAR} ou écrivez sur WhatsApp au ${WHATSAPP_BAR}.`, servicios:'Oui, nous avons une terrasse, le wifi gratuit et la vente à emporter.', recomienda:'Notre spécialité est le plat cubain : riz aux haricots, accompagnements et viande.', hola2:'Bonjour. Comment puis-je vous aider ?', gracias:'Avec plaisir. Bon appétit !', mas:'et {n} autres sur la carte', racion:'Portion', desde:'Dès' },
+    abierto:"Oui, nous sommes ouverts jusqu'à {h}.", cerrado:'Nous sommes fermés pour le moment.', hoyCerrado:"Nous sommes fermés aujourd'hui.", direccion:`Nous sommes ${DIRECCION_BAR}.`, telefono:`Appelez le ${TELEFONO_BAR} ou écrivez sur WhatsApp au ${WHATSAPP_BAR}.`, servicios:'Nous avons : ', nombresServicios:['terrasse', 'wifi gratuit', 'vente à emporter'], recomienda:'Notre spécialité est le plat cubain : riz aux haricots, accompagnements et viande.', hola2:'Bonjour. Comment puis-je vous aider ?', gracias:'Avec plaisir. Bon appétit !', mas:'et {n} autres sur la carte', racion:'Portion', desde:'Dès' },
   pt: { boton:'Perguntar ao assistente', titulo:'Assistente do bar', hola:'Olá. Pergunte-me sobre um prato, os preços ou o horário.', campo:'Escreva a sua pergunta', enviar:'Enviar', cerrar:'Fechar', aviso:'Respostas automáticas. Em caso de alergias, pergunte sempre ao pessoal.',
     sugerencias:['Quanto custa o prato cubano?','Que pizzas têm?','Abrem hoje?','Onde ficam?'],
     alergia:`Não posso confirmar alergénios nem ingredientes. Pergunte ao pessoal ou ligue para ${TELEFONO_BAR} antes de pedir.`, nose:`Não tenho essa informação. Pergunte ao pessoal, ligue para ${TELEFONO_BAR} ou escreva por WhatsApp para ${WHATSAPP_BAR}.`,
-    horario:'Abrimos de terça a domingo, das 10:00 às 23:00. Fechamos à segunda-feira.', abierto:'Sim, estamos abertos até às 23:00.', cerrado:'Agora estamos fechados.', hoyCerrado:'Hoje, segunda-feira, estamos fechados.', direccion:'Estamos na Av. de Canarias, 450, 35110 Vecindario.', telefono:`Ligue para ${TELEFONO_BAR} ou escreva por WhatsApp para ${WHATSAPP_BAR}.`, servicios:'Sim, temos esplanada, wifi gratuito e comida para levar.', recomienda:'A nossa especialidade é o prato cubano: arroz com feijão, acompanhamentos e carne.', hola2:'Olá. Como posso ajudar?', gracias:'De nada. Bom apetite!', mas:'e mais {n} na ementa', racion:'Dose', desde:'Desde' }
+    abierto:'Sim, estamos abertos até às {h}.', cerrado:'Agora estamos fechados.', hoyCerrado:'Hoje estamos fechados.', direccion:`Estamos na ${DIRECCION_BAR}.`, telefono:`Ligue para ${TELEFONO_BAR} ou escreva por WhatsApp para ${WHATSAPP_BAR}.`, servicios:'Temos: ', nombresServicios:['esplanada', 'wifi gratuito', 'comida para levar'], recomienda:'A nossa especialidade é o prato cubano: arroz com feijão, acompanhamentos e carne.', hola2:'Olá. Como posso ajudar?', gracias:'De nada. Bom apetite!', mas:'e mais {n} na ementa', racion:'Dose', desde:'Desde' }
 };
 
 (function iniciarAsistente() {
@@ -80,11 +81,23 @@ const textosAsistente = {
     return lineas.join('\n');
   }
 
+  const minutos = hora => { const [h, m] = hora.split(':').map(Number); return h * 60 + m; };
+  const textoHorarioAsistente = () => textoHorario(idioma()).replace(/<br>/g, '\n');
+
   function estadoAhora(t) {
-    const partes = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Atlantic/Canary', weekday: 'short', hour: 'numeric', hour12: false }).formatToParts(new Date()).map(x => [x.type, x.value]));
-    const hora = Number(partes.hour) % 24;
-    if (partes.weekday === 'Mon') return `${t.hoyCerrado} ${t.horario}`;
-    return hora >= 10 && hora < 23 ? t.abierto : `${t.cerrado} ${t.horario}`;
+    const partes = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Atlantic/Canary', weekday: 'short', hour: 'numeric', minute: 'numeric', hour12: false }).formatToParts(new Date()).map(x => [x.type, x.value]));
+    const indice = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].indexOf(partes.weekday);
+    const dia = datosBar.horario[DIAS_BAR[indice]];
+    if (!dia) return `${t.hoyCerrado}\n${textoHorarioAsistente()}`;
+    const ahora = (Number(partes.hour) % 24) * 60 + Number(partes.minute);
+    const cierre = minutos(dia.cierra) <= minutos(dia.abre) ? minutos(dia.cierra) + 1440 : minutos(dia.cierra);
+    return ahora >= minutos(dia.abre) && ahora < cierre ? t.abierto.replace('{h}', dia.cierra) : `${t.cerrado}\n${textoHorarioAsistente()}`;
+  }
+
+  function textoServicios(t) {
+    const activos = [datosBar.servicios.terraza, datosBar.servicios.wifi, datosBar.servicios.llevar];
+    const lista = t.nombresServicios.filter((_, i) => activos[i]);
+    return lista.length ? t.servicios + lista.join(', ') + '.' : t.nose;
   }
 
   function responder(pregunta) {
@@ -98,10 +111,10 @@ const textosAsistente = {
     if (mejores.length && masLargo >= 8) return listar(mejores);
 
     if (/\b(hoy|ahora|today|now|heute|jetzt|vandaag|nu|aujourd hui|maintenant|hoje|agora)\b/.test(q) && /abr|abiert|open|geoffnet|ouvert|cierr|cerr|closed/.test(q)) return estadoAhora(t);
-    if (/horari|\babr[eiaí]|abiert|cierr|cerrai|\bhours?\b|\bopen|closed|offnungszeit|geoffnet|geschlossen|openingstijd|gesloten|horaire|ouvert|ferme|fecha|\baber/.test(q)) return t.horario;
+    if (/horari|\babr[eiaí]|abiert|cierr|cerrai|\bhours?\b|\bopen|closed|offnungszeit|geoffnet|geschlossen|openingstijd|gesloten|horaire|ouvert|ferme|fecha|\baber/.test(q)) return textoHorarioAsistente();
     if (/donde|direccion|ubicacion|llegar|\bwhere\b|address|location|\bwo\b|adresse|\bwaar\b|adres|\bou\b|\bonde\b|morada|localiza/.test(q)) return t.direccion;
     if (/telefono|llamar|whatsapp|\bphone\b|\bcall\b|contact|telefon|anrufen|bellen|telephone|appeler|ligar/.test(q)) return t.telefono;
-    if (/terraz|terrace|terrasse|terras|esplanada|wifi|wlan|llevar|takeaway|take away|mitnehmen|afhal|emporter|levar/.test(q)) return t.servicios;
+    if (/terraz|terrace|terrasse|terras|esplanada|wifi|wlan|llevar|takeaway|take away|mitnehmen|afhal|emporter|levar/.test(q)) return textoServicios(t);
     if (/recom|especial|speciali|empfehl|empfiehl|raad|aanbevel|conseill|sugier|suggest/.test(q)) {
       const cubano = productos.find(p => p.nombres[0] === 'Plato cubano');
       return `${t.recomienda}\n${lineaProducto(cubano)}`;
